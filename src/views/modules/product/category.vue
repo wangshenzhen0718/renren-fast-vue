@@ -1,14 +1,15 @@
 <!--  -->
 <template>
-  <el-tree
-    :data="menus"
-    :props="defaultProps"
-    :default-expanded-keys="expandedKey"
-    show-checkbox
-    node-key="catId"
-    :expand-on-click-node="false"
-    @node-click="handleNodeClick"
-  >
+  <div>
+    <el-tree
+      :data="menus"
+      :props="defaultProps"
+      :default-expanded-keys="expandedKey"
+      show-checkbox
+      node-key="catId"
+      :expand-on-click-node="false"
+      @node-click="handleNodeClick"
+    >
     <span
       class="custom-tree-node"
       slot-scope="{ node, data }"
@@ -33,7 +34,24 @@
             </el-button>
       </span>
       </span>
-  </el-tree>
+    </el-tree>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%">
+      <el-form ref="form" :model="catagory">
+        <el-form-item label="分类名称">
+          <el-input v-model="catagory.name"></el-input>
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="addCategory">确 定</el-button>
+  </span>
+    </el-dialog>
+  </div>
+
 </template>
 
 <script>
@@ -46,7 +64,19 @@ export default {
   data() {
     return {
       menus: [],
-      expandedKey:[],
+      dialogVisible: false,
+      expandedKey: [],
+      form: {
+        name: '',
+
+      },
+      catagory: {
+        name: "",
+        parentCid: 0,
+        catLevel: 0,
+        showStatus: 1,
+        sort: 0
+      },
       defaultProps: {
         children: "children",
         label: "name"
@@ -63,17 +93,40 @@ export default {
       this.$http({
         url: this.$http.adornUrl("/product/category/list/tree"),
         method: "get"
-      }).then(({ data }) => {
+      }).then(({data}) => {
         this.menus = data.page;
         console.log("成功！！！", data.page);
       });
     },
     append(data) {
-      const newChild = { id: id++, label: "testtest", children: [] };
-      if (!data.children) {
-        this.$set(data, "children", []);
-      }
-      data.children.push(newChild);
+      console.log(data)
+      this.dialogVisible = true
+      this.catagory.parentCid = data.catId;
+      this.catagory.catLevel = data.catLevel * 1 + 1
+
+      // const newChild = {id: id++, label: "testtest", children: []};
+      // if (!data.children) {
+      //   this.$set(data, "children", []);
+      // }
+      // data.children.push(newChild);
+    },
+    addCategory() {
+      console.log("提交的三级分类" + this.catagory.catLevel);
+      this.$http({
+        url: this.$http.adornUrl("/product/category/save"),
+        method: "post",
+        data: this.$http.adornData(this.catagory, false)
+      }).then(({data}) => {
+        console.log("添加成功！！！");
+        this.$message({
+          message: `添加成功  `,
+          type: "success"
+        });
+
+      });
+      this.dialogVisible = false
+      this.getMenus();
+      this.expandedKey = [this.catagory.parentCid]
     },
 
     remove(node, data) {
@@ -88,7 +141,7 @@ export default {
           url: this.$http.adornUrl("/product/category/delete"),
           method: "post",
           data: this.$http.adornData(ids, false)
-        }).then(({ data }) => {
+        }).then(({data}) => {
           console.log("删除成功！！！");
           this.$message({
             message: `删除成功  `,
@@ -96,8 +149,10 @@ export default {
           });
           this.getMenus();
           //测试11
-          this.expandedKey=[node.parent.data.catId]
+          this.expandedKey = [node.parent.data.catId]
         });
+      }).catch(() => {
+        //防止前台红色错误
       });
       // console.log("remove", node, data);
       // const parent = node.parent;
@@ -117,13 +172,21 @@ export default {
     console.log("获取数据成功！");
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
-  beforeCreate() {}, //生命周期 - 创建之前
-  beforeMount() {}, //生命周期 - 挂载之前
-  beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {}, //生命周期 - 更新之后
-  beforeDestroy() {}, //生命周期 - 销毁之前
-  destroyed() {}, //生命周期 - 销毁完成
-  activated() {} //如果页面有keep-alive缓存功能，这个函数会触发
+  mounted() {
+  },
+  beforeCreate() {
+  }, //生命周期 - 创建之前
+  beforeMount() {
+  }, //生命周期 - 挂载之前
+  beforeUpdate() {
+  }, //生命周期 - 更新之前
+  updated() {
+  }, //生命周期 - 更新之后
+  beforeDestroy() {
+  }, //生命周期 - 销毁之前
+  destroyed() {
+  }, //生命周期 - 销毁完成
+  activated() {
+  } //如果页面有keep-alive缓存功能，这个函数会触发
 };
 </script>
