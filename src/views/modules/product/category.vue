@@ -35,7 +35,7 @@
             v-if="node.childNodes.length==0"
             type="text"
             size="mini"
-            @click="() => update(data)"
+            @click="() => remove(node,data)"
           >
             Delete
             </el-button>
