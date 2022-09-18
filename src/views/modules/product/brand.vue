@@ -34,11 +34,14 @@
         align="center"
         label="品牌名">
       </el-table-column>
-      <el-table-column
-        prop="logo"
-        header-align="center"
-        align="center"
-        label="品牌logo地址">
+      <el-table-column prop="logo" header-align="center" align="center" label="品牌logo地址">
+        <template slot-scope="scope">
+          <!-- <el-image
+              style="width: 100px; height: 80px"
+              :src="scope.row.logo"
+          fit="fill"></el-image>-->
+          <img :src="scope.row.logo" style="width: 100px; height: 80px" />
+        </template>
       </el-table-column>
       <el-table-column
         prop="descript"
@@ -103,6 +106,7 @@
 
 <script>
   import AddOrUpdate from './brand-add-or-update'
+
   export default {
     data () {
       return {
