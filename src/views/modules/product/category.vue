@@ -148,8 +148,8 @@ export default {
         url: this.$http.adornUrl("/product/category/list/tree"),
         method: "get"
       }).then(({data}) => {
-        this.menus = data.page;
-        console.log("成功！！！", data.page);
+        this.menus = data.data;
+        console.log("成功！！！", data.data);
       });
     },
     append(data) {
