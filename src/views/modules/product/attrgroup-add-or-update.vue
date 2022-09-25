@@ -75,7 +75,7 @@ export default {
     };
   },
   components:{CategoryCascader},
-
+  
   methods: {
     dialogClose(){
       this.catelogPath = [];
