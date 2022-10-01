@@ -45,7 +45,7 @@
         <category-cascader :catelogPath.sync="catelogPath"></category-cascader>
       </el-form-item>
       <el-form-item label="所属分组" prop="attrGroupId" v-if="type == 1">
-        <el-select ref="groupSelect" v-model="dataForm.attrGroupId" placeholder="请选择">
+        <el-select ref="groupSelect" clearable v-model="dataForm.attrGroupId" placeholder="请选择">
           <el-option
             v-for="item in attrGroups"
             :key="item.attrGroupId"
