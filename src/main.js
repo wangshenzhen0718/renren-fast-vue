@@ -10,7 +10,13 @@ import '@/assets/scss/index.scss'
 import httpRequest from '@/utils/httpRequest' // api: https://github.com/axios/axios
 import { isAuth } from '@/utils'
 import cloneDeep from 'lodash/cloneDeep'
-
+import PubSub from 'pubsub-js'
+Vue.prototype.PubSub = PubSub
+// 关于pubsub、publish报错，无法发送查询品牌信息的请求：
+// 1、npm install --save pubsub-js
+// 2、在src下的main.js中引用：
+// ① import PubSub from 'pubsub-js'
+// ② Vue.prototype.PubSub = PubSub
 Vue.use(VueCookie)
 Vue.config.productionTip = false
 
