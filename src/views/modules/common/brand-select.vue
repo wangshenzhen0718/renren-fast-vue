@@ -25,8 +25,8 @@ export default {
       catId: 0,
       brands: [
         {
-          label: "a",
-          value: 1
+          // label: "a",
+          // value: 1
         }
       ],
       brandId: "",
